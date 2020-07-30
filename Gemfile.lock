@@ -166,7 +166,7 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
-    unicorn (5.6.0)
+    unicorn (5.4.1)
       kgio (~> 2.6)
       raindrops (~> 0.7)
     websocket-driver (0.7.3)
@@ -194,7 +194,7 @@ DEPENDENCIES
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
-  unicorn
+  unicorn (= 5.4.1)
 
 RUBY VERSION
    ruby 2.7.0p0
