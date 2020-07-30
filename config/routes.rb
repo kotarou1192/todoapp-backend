@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  get 'hello_world/index'
+  get 'hello_world/index', to: 'hello_world#index'
   post '/users/create', to: 'users#create'
   post '/users/delete', to: 'users#destroy'
   post '/users/edit', to: 'users#update'
