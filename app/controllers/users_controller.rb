@@ -7,7 +7,8 @@ class UsersController < ApplicationController
     user = User.new(user_params)
     user.id = generate_uuid
     if user.save
-      login
+      UserMailer.account_activation(user).deliver_now
+      render json: { status: 'SUCCESS', message: 'acount creation success' }
     else
       render json: { status: 'ERROR', message: 'create user failed', error: user.errors }
     end
@@ -17,6 +18,10 @@ class UsersController < ApplicationController
     user = User.find_by(email: user_params[:email].downcase)
     unless user
       return render json: { status: 'ERROR', message: 'invalid email address' }
+    end
+
+    unless user.activated?
+      render json: { status: 'ERROR', message: 'account is not activated' }
     end
 
     if user&.authenticate(user_params[:password])

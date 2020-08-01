@@ -23,7 +23,7 @@ module UserHelper
   def generate_access_token(user)
     delete_old_sessions(user.email)
     loop do
-      @token = SecureRandom.hex(64)
+      @token = User.new_token
       break unless Session.find_by(token: secure_token(@token))
     end
     session = Session.new(token: secure_token(@token),
@@ -35,7 +35,7 @@ module UserHelper
   end
 
   def secure_token(token)
-    token.crypt('secret_key')
+    User.digest(token)
   end
 
   def delete_old_sessions(email)
