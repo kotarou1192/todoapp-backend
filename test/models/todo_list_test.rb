@@ -4,7 +4,10 @@ require 'test_helper'
 
 class TodoListTest < ActiveSupport::TestCase
   def setup
-    @todo = TodoList.new(text: 'example', userName: 'user')
+    @user = User.new(name: 'hogehoge', password: 'hogehoge', email: 'hogehoge@hoge.com')
+    @user.id = SecureRandom.uuid
+    @user.save
+    @todo = TodoList.new(text: 'example', userName: 'user', user_id: @user.id)
   end
 
   test 'should be valid' do
