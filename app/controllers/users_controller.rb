@@ -30,7 +30,7 @@ class UsersController < ApplicationController
 
   def update
     user = User.find_by(email: user_params[:email].downcase)
-    session = Session.find_by(token: user_token)
+    session = Session.find_by(token: secure_token(user_token))
     unless user && session
       return render json: { status: 'ERROR', message: 'invalid parameters' }
     end
@@ -48,7 +48,7 @@ class UsersController < ApplicationController
   end
 
   def logout
-    session = Session.find_by(token: user_token)
+    session = Session.find_by(token: secure_token(user_token))
     user = User.find_by(email: session[:user_email].downcase)
     unless user && session
       return render json: { status: 'ERROR', message: 'invalid parameters' }
@@ -60,7 +60,7 @@ class UsersController < ApplicationController
 
   def destroy
     user = User.find_by(email: user_params[:email].downcase)
-    session = Session.find_by(token: user_token)
+    session = Session.find_by(token: secure_token(user_token))
     unless user && session
       return render json: { status: 'ERROR', message: 'invalid parameters' }
     end
@@ -81,7 +81,7 @@ class UsersController < ApplicationController
   private
 
   def token_valid?(token)
-    session = Session.find_by(token: token)
+    session = Session.find_by(token: secure_token(token))
     return false unless session
 
     elapsed_time = (Time.now - session.created_at) / 86_400
@@ -108,14 +108,18 @@ class UsersController < ApplicationController
     delete_old_sessions(user.email)
     loop do
       @token = SecureRandom.hex(64)
-      break unless Session.find_by(token: @token)
+      break unless Session.find_by(token: secure_token(@token))
     end
-    session = Session.new(token: @token,
+    session = Session.new(token: secure_token(@token),
                           user_email: user.email.downcase,
                           user_name: user.name)
     return @token if session.save
 
     nil
+  end
+
+  def secure_token(token)
+    token.crypt('secret_key')
   end
 
   def delete_old_sessions(email)
