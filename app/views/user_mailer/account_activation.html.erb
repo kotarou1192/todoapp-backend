@@ -1,0 +1,9 @@
+<h1>from takashiii-hq.com</h1>
+
+<p>ようこそ, <%= @user.name %>さん, </p>
+
+<p>
+ご登録いただきありがとうございます、次のリンクをクリックしてアカウントを有効化してください
+</p>
+
+<%= link_to "Activate", edit_account_activation_url(@user.activation_token, email: @user.email) %>
