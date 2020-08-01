@@ -3,7 +3,7 @@
 # 注意：ユーザーネームとあるが、実際はメールアドレスで管理している
 
 class TodoListsController < ApplicationController
-  DAY_LIMIT = 2
+  include UserHelper
 
   def create
     return render json: { status: 'NOT_LOGIN' } unless login?
@@ -79,7 +79,7 @@ class TodoListsController < ApplicationController
 
   def user_email
     token = params.permit(:token)[:token]
-    session = Session.find_by(token: token)
+    session = Session.find_by(token: secure_token(token))
 
     session.user_email
   end
@@ -87,24 +87,5 @@ class TodoListsController < ApplicationController
   def login?
     token = params.permit(:token)[:token]
     token_valid?(token)
-  end
-
-  def token_valid?(token)
-    session = Session.find_by(token: token)
-    return false unless session
-
-    elapsed_time = (Time.now - session.created_at) / 86_400
-
-    return false if elapsed_time > DAY_LIMIT
-
-    true
-  end
-
-  def delete_old_sessions(email)
-    sessions = Session.where(user_email: email.downcase)
-
-    ActiveRecord::Base.transaction do
-      sessions.each(&:destroy!)
-    end
   end
 end
