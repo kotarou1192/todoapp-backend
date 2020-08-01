@@ -1,0 +1,13 @@
+=> Booting Puma
+=> Rails 6.0.3.2 application starting in production 
+=> Run `rails server --help` for more startup options
+Puma starting in single mode...
+* Version 4.3.5 (ruby 2.7.0-p0), codename: Mysterious Traveller
+* Min threads: 5, max threads: 5
+* Environment: production
+* Listening on unix:///home/ec2-user/www/todoapp-backend/tmp/sockets/puma.sock
+Use Ctrl-C to stop
+- Gracefully stopping, waiting for requests to finish
+=== puma shutdown: 2020-08-01 22:47:11 +0000 ===
+- Goodbye!
+Exiting
