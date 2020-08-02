@@ -33,3 +33,4 @@
 /config/database.yml
 /config/credentials/production.key
 /config/puma.rb
+/config/environments/production.rb
