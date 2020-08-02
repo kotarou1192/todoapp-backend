@@ -5,7 +5,8 @@ module UserHelper
   DAY_LIMIT = 2
 
   def token_valid?(token)
-    session = Session.find_by(token: secure_token(token))
+    token_digest = secure_token(token)
+    session = Session.find_by(token: token_digest)
     return false unless session
 
     elapsed_time = (Time.now - session.created_at) / 86_400
@@ -23,7 +24,7 @@ module UserHelper
   def generate_access_token(user)
     delete_old_sessions(user.email)
     loop do
-      @token = User.new_token
+      @token = SecureRandom.hex(64)
       @token_digest = secure_token(@token)
       break unless Session.find_by(token: @token_digest)
     end
@@ -36,7 +37,7 @@ module UserHelper
   end
 
   def secure_token(token)
-    User.digest(token)
+    Digest::SHA256.hexdigest(token)
   end
 
   def delete_old_sessions(email)

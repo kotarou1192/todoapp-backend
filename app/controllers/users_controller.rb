@@ -26,7 +26,6 @@ class UsersController < ApplicationController
 
     if user&.authenticated?(:password, user_params[:password])
       token = generate_access_token(user)
-      p 'success!!'
       render json: { status: 'SUCCESS', message: 'login success', token: token }
     else
       render json: { status: 'ERROR', message: 'failed to authenticate' }
