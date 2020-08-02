@@ -24,7 +24,7 @@ class UsersController < ApplicationController
       render json: { status: 'ERROR', message: 'account is not activated' }
     end
 
-    if user&.authenticate(user_params[:password])
+    if user&.authenticate(:password, user_params[:password])
       delete_old_sessions(user_params[:email])
       token = generate_access_token(user)
       render json: { status: 'SUCCESS', message: 'login success', token: token }
