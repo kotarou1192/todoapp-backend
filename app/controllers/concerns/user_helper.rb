@@ -24,9 +24,10 @@ module UserHelper
     delete_old_sessions(user.email)
     loop do
       @token = User.new_token
-      break unless Session.find_by(token: secure_token(@token))
+      @token_digest = secure_token(@token)
+      break unless Session.find_by(token: @token_digest)
     end
-    session = Session.new(token: secure_token(@token),
+    session = Session.new(token: @token_digest,
                           user_email: user.email.downcase,
                           user_name: user.name)
     return @token if session.save
@@ -40,6 +41,8 @@ module UserHelper
 
   def delete_old_sessions(email)
     sessions = Session.where(user_email: email.downcase)
+
+    return if sessions.empty?
 
     ActiveRecord::Base.transaction do
       sessions.each(&:destroy!)
