@@ -8,7 +8,7 @@ class AccountActivationsController < ApplicationController
     if user&.activated? && user&.authenticated?(:activation, params[:id])
       user.update_attribute(:activated, true)
       user.update_attribute(:activated_at, Time.zone.now)
-      redirect_to 'users/login'
+      redirect_to 'https://takashiii-hq.com'
     else
       render json: { status: 'ERROR', message: 'invalid activation link' }
     end
