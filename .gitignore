@@ -34,3 +34,4 @@
 /config/credentials/production.key
 /config/puma.rb
 /config/environments/production.rb
+nohup.out
