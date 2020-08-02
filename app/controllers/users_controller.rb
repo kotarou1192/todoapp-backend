@@ -34,7 +34,8 @@ class UsersController < ApplicationController
 
   def update
     user = User.find_by(email: user_params[:email].downcase)
-    session = Session.find_by(token: secure_token(user_token))
+    token_digest = secure_token(user_token)
+    session = Session.find_by(token: token_digest)
     unless user && session
       return render json: { status: 'ERROR', message: 'invalid parameters' }
     end
