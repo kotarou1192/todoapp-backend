@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get 'password_resets/new'
+  get 'password_resets/edit'
   get 'hello_world/index', to: 'hello_world#index'
   post '/users/create', to: 'users#create'
   post '/users/delete', to: 'users#destroy'
@@ -15,4 +17,5 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   # resources :todo_lists
   resources :account_activations, only: [:edit]
+  resources :password_resets,     only: %i[new create edit update]
 end
