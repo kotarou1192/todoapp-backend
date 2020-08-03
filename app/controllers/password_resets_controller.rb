@@ -27,8 +27,8 @@ class PasswordResetsController < ActionController::Base
   def update
     return render :edit if params[:user][:password].empty?
 
-    if @user.update(user_params)
-      flash[:success] = 'password has been reset'
+    password_digest = User.digest(user_params[:password])
+    if @user.update(password_digest: password_digest)
       redirect_to 'https://takashiii-hq.com'
     else
       render :edit

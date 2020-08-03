@@ -6,6 +6,7 @@ class UsersController < ApplicationController
   def create
     user = User.new(user_params)
     user.id = generate_uuid
+    user.password_digest = User.digest(user.password)
     if user.save
       user.send_activate_email
       render json: { status: 'SUCCESS', message: 'acount creation success' }

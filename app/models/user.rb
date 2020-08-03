@@ -11,7 +11,6 @@ class User < ApplicationRecord
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: true
 
-  has_secure_password
   validates :password, presence: true, length: { minimum: 6 }
 
   has_many :todo_lists, dependent: :destroy
