@@ -16,7 +16,6 @@ class PasswordResetsController < ActionController::Base
       @user.send_password_reset_email
       flash[:info] = '登録されているメールアドレス宛にメールを送りました'
     else
-      puts 'invalid'
       flash.now[:danger] = 'そのようなメールアドレスは登録されていません'
     end
     render :new
@@ -25,7 +24,6 @@ class PasswordResetsController < ActionController::Base
   def edit; end
 
   def update
-    puts 'called!'
     if params[:user][:password].empty? || params[:user][:password] != params[:user][:password_confirmation]
       return render :edit
     end
@@ -34,10 +32,8 @@ class PasswordResetsController < ActionController::Base
 
     @user.password_digest = User.digest(@user.password)
     if @user.save
-      p 'SUCCESS'
       redirect_to 'https://takashiii-hq.com'
     else
-      p 'failed'
       render :edit
     end
   end
