@@ -3,7 +3,10 @@
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
-    <%= form_with(model: @user, url: password_reset_path(params[:id]),
+  <% flash.each do |message_type, message| %>
+    <div class=<%=message_type%>><%= message %></div>
+  <% end %>
+    <%= form_with(model: @user, url: password_reset_path(params[:id], protocol: 'https'),
                   local: true) do |f| %>
 
       <%= hidden_field_tag :email, @user.email %>

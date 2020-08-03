@@ -17,20 +17,18 @@ class User < ApplicationRecord
   has_many :todo_lists, dependent: :destroy
 
   def self.new_token
-    SecureRandom.urlsafe_base64
+    @token = SecureRandom.hex(64)
   end
 
   def self.digest(string)
-    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
-                                                  BCrypt::Engine.cost
-    BCrypt::Password.create(string, cost: cost)
+    Digest::SHA256.hexdigest(string)
   end
 
   def authenticated?(attribute, token)
     digest = send("#{attribute}_digest")
     return false if digest.nil?
 
-    BCrypt::Password.new(digest).is_password?(token)
+    User.digest(token) == digest
   end
 
   def activate
@@ -52,9 +50,6 @@ class User < ApplicationRecord
 
   def create_reset_digest
     self.reset_token = User.new_token
-    p '==='
-    p reset_token
-    p '==='
     update_attribute(:reset_digest,  User.digest(reset_token))
     update_attribute(:reset_sent_at, Time.zone.now)
   end
