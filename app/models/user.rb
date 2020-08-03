@@ -17,7 +17,7 @@ class User < ApplicationRecord
   has_many :todo_lists, dependent: :destroy
 
   def self.new_token
-    @token = SecureRandom.hex(64)
+    SecureRandom.hex(64)
   end
 
   def self.digest(string)

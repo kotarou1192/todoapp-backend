@@ -42,16 +42,11 @@ class PasswordResetsController < ActionController::Base
   end
 
   def get_user
-    p @user = User.find_by(email: params[:email])
+    @user = User.find_by(email: params[:email])
   end
 
   # 有効なユーザーかどうか確認する
   def valid_user
-    p params[:id]
-    p @user.activated?
-    p @user.reset_digest
-    p BCrypt::Password.new(@user.reset_digest).is_password?(params[:id])
-    p @user.authenticated?(:reset, params[:id])
     unless @user&.activated? &&
            @user&.authenticated?(:reset, params[:id])
       redirect_to 'https://takashiii-hq.com'
