@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     user.id = generate_uuid
     user.password_digest = User.digest(user.password)
     if user.save
-      user.send_activate_email
+      user.send_activation_email
       render json: { status: 'SUCCESS', message: 'acount creation success' }
     else
       render json: { status: 'ERROR', message: 'create user failed', error: user.errors }

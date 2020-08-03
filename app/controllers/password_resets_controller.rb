@@ -25,12 +25,19 @@ class PasswordResetsController < ActionController::Base
   def edit; end
 
   def update
-    return render :edit if params[:user][:password].empty?
+    puts 'called!'
+    if params[:user][:password].empty? || params[:user][:password] != params[:user][:password_confirmation]
+      return render :edit
+    end
 
-    password_digest = User.digest(user_params[:password])
-    if @user.update(password_digest: password_digest)
+    @user.password = user_params[:password]
+
+    @user.password_digest = User.digest(@user.password)
+    if @user.save
+      p 'SUCCESS'
       redirect_to 'https://takashiii-hq.com'
     else
+      p 'failed'
       render :edit
     end
   end

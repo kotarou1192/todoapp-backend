@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  attr_accessor :activation_token, :reset_token
+  attr_accessor :activation_token, :reset_token, :password
   before_save   :downcase_email
   before_create :create_activation_digest
 
@@ -35,7 +35,7 @@ class User < ApplicationRecord
     update_attribute(:activated_at, Time.zone.now)
   end
 
-  def send_activation_emanl
+  def send_activation_email
     UserMailer.account_activation(self).deliver_now
   end
 
