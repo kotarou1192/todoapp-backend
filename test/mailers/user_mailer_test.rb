@@ -7,9 +7,9 @@ class UserMailerTest < ActionMailer::TestCase
     @user = User.new(id: SecureRandom.uuid,
                      name: 'hoge',
                      email: 'hoge@email.com',
-                     password: 'hogefuga',
-                     password_confirmation: 'hogefuga')
+                     password: 'hogefuga')
     @user.reset_token = User.new_token
+    @user.password_digest = User.digest(@user.password)
     @user.save
   end
   test 'account_activation' do
