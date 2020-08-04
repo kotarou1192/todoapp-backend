@@ -22,7 +22,7 @@ class UsersController < ApplicationController
     end
 
     unless user.activated?
-      render json: { status: 'ERROR', message: 'account is not activated' }
+      return render json: { status: 'ERROR', message: 'account is not activated' }
     end
 
     if user&.authenticated?(:password, user_params[:password])
