@@ -37,7 +37,7 @@ class UsersController < ApplicationController
     user = User.find_by(email: user_params[:email].downcase)
     token_digest = secure_token(user_token)
     session = Session.find_by(token: token_digest)
-    unless user && session
+    unless user && session && user.email == session.user_email
       return render json: { status: 'ERROR', message: 'invalid parameters' }
     end
 
@@ -46,7 +46,7 @@ class UsersController < ApplicationController
       return render json: { status: 'OLD_TOKEN', message: 'please re-login' }
     end
 
-    if user.email == session.user_email && update_user_params(user)
+    if update_user_params(user)
       render json: { status: 'SUCCESS', message: 'updated the user' }
     else
       render json: { status: 'ERROR', message: 'failed to authenticate' }
@@ -68,7 +68,7 @@ class UsersController < ApplicationController
     user = User.find_by(email: user_params[:email].downcase)
     token_digest = secure_token(user_token)
     session = Session.find_by(token: token_digest)
-    unless user && session
+    unless user && session && user.email == session.user_email
       return render json: { status: 'ERROR', message: 'invalid parameters' }
     end
 
@@ -77,12 +77,8 @@ class UsersController < ApplicationController
       return render json: { status: 'OLD_TOKEN', message: 'please re-login' }
     end
 
-    if user.email == session.user_email
-      user.destroy
-      render json: { status: 'SUCCESS', message: 'deleted the user' }
-    else
-      render json: { status: 'ERROR', message: 'failed to authenticate' }
-    end
+    user.destroy
+    render json: { status: 'SUCCESS', message: 'deleted the user' }
   end
 
   private
