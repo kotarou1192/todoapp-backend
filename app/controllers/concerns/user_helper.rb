@@ -9,9 +9,7 @@ module UserHelper
     session = Session.find_by(token: token_digest)
     return false unless session
 
-    elapsed_time = (Time.now - session.created_at) / 86_400
-
-    return false if elapsed_time > DAY_LIMIT
+    return false if session.created_at < DAY_LIMIT.days.ago
 
     true
   end
